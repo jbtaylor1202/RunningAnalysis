@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(tidyverse)\nlibrary(lubridate)\n\nfetchData<-read_csv(file.choose())\n\nfetchData$Date<-dmy(fetchData$Date)\n\nfetchData$Miles <- ifelse(fetchData$Unit == \"km\",fetchData$Distance *  0.62137119, fetchData$Distance)\n\nfetchDataRun <- fetchData %>%\n  filter(Category == 'R') %>%\n  filter(Distance > 1) %>%\n  filter (Time > '00:00:00') %>%\n  filter (Time < 7370) %>%\n  mutate (runSeconds = seconds(Time)) %>%\n  mutate (runYear = year(Date))\n  \nfetchDataRun$runSeconds <- as.numeric(fetchDataRun$runSeconds)\nfetchDataRun$runYear <- as.factor(fetchDataRun$runYear)\n\n\nggplot(data = fetchDataRun, aes(x = Miles, y = runSeconds)) +\n  geom_point(aes(colour = runYear)) +\n  geom_smooth(method=lm)\n\nggplot(data = fetchDataRun, aes(x = Miles, y = runSeconds)) +\n  geom_point() +\n  geom_smooth(method=lm) +\n  facet_wrap(facets = ~ runYear,nrow = 2)\n\nggplot(data = fetchDataRun, aes(x = Miles, y = runSeconds, colour = runYear)) +\n  geom_point() +\n  geom_smooth(method=lm)\n\nrunCount<-fetchDataRun %>%\n  group_by(runYear) %>%\n  tally()\n\nggplot(data = runCount, aes(x = runYear, y = n)) +\n  geom_bar(aes(stat = ''))\n  \n\n",
+    "created" : 1518037053895.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1919823532",
+    "id" : "62BCAF79",
+    "lastKnownWriteTime" : 1518107285,
+    "last_content_update" : 1518107285531,
+    "path" : "C:/Users/joet/OneDrive - English Institute of Sport/Meetings/PPIG/2018/Running Analysis/running.R",
+    "project_path" : "running.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
